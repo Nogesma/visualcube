@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "removeComments": true,
+    "outDir": "dist",
+    "lib": ["ES2020"],
+    "module": "ES2020",
+    "moduleResolution": "node",
+    "target": "ES2020"
+  },
+
+  "include": ["index.ts", "src/**/*"],
+  "exclude": ["node_modules", "cube_lib.ts"]
+}
