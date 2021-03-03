@@ -68,16 +68,22 @@ function fcs_move_id(move) {
     case 'B':
       return 11;
     case 'u':
+    case 'Uw':
       return 12;
     case 'r':
+    case 'Rw':
       return 13;
     case 'f':
+    case 'Fw':
       return 14;
     case 'd':
+    case 'Dw':
       return 15;
     case 'l':
+    case 'Lw':
       return 16;
     case 'b':
+    case 'Bw':
       return 17;
   }
   return -1;
@@ -99,39 +105,27 @@ const move_pow = (char) => {
 // Parses an algorithm string into a move-id sequence
 const fcs_parse_alg = (alg, dim) => {
   let moves = [];
-  let i = 0;
   let j = 0;
-  let pre = 0;
-  let len = alg.length;
-  while (i < len) {
-    let c = alg.substr(i, 1);
-    let mv = fcs_move_id(c);
-    if (!isNaN(Number(c))) {
-      pre = c;
-    } else {
-      if (mv >= 0) {
-        let pow = i < alg.length - 1 ? move_pow(alg.substr(i + 1, 1)) : 1;
-        if (pow > 1) {
-          i++;
-        }
-        // Add the move
-        pre = pre < 1 ? 1 : pre > dim - 1 ? dim - 1 : pre;
-        if (mv >= 12) {
-          mv -= 6;
-          pre = pre < 2 ? 2 : pre;
-        }
-        for (let k = 0; k < pow; k++) {
-          moves[j++] = mv < 6 ? mv : 6 + (mv - 6) * (dim - 1) + (pre - 1);
-        }
-        pre = 1;
-      } else {
-        pre = 1;
+  let mvArray = R.split(' ', alg);
+  for (const c of mvArray) {
+    const mv = R.match(/[rufldbemsxyzw]+/gi, c)[0];
+    let mvID = fcs_move_id(mv);
+    if (mvID > 0) {
+      let pre: number = Number(R.match(/\d/g, c)[0]) || 1;
+      const pow = R.split(mv, c)[1];
+      let powID = move_pow(pow);
+
+      pre = pre > dim - 1 ? dim - 1 : pre;
+      if (mvID >= 12) {
+        mvID -= 6;
+        pre = pre < 2 ? 2 : pre;
+      }
+      for (let k = 0; k < powID; k++) {
+        moves[j++] = mvID < 6 ? mv : 6 + (mvID - 6) * (dim - 1) + (pre - 1);
       }
     }
-    i++;
   }
-  //		echo "|" . $alg . "|";
-  //		print_r($moves);
+
   return moves;
 };
 

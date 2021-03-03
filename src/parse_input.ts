@@ -246,7 +246,6 @@ const parseEverything = (options) => {
 
 // Retrieve colour def
 // This overrides face def and makes the $scheme variable redundant (ie, gets reset to default)
-let using_cols = false;
 // let uf = DEFAULTS['fc'];
 
 //  uf = array_key_exists('fc', _REQUEST) ? _REQUEST['fc'] : (!array_key_exists('fd', _REQUEST) ? DEFAULTS['fc'] : '');
