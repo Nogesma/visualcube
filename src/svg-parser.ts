@@ -1,5 +1,4 @@
-// Import configuration values
-
+import sharp from 'sharp';
 import {
   project,
   face_visible,
@@ -453,7 +452,6 @@ const generateImage = ({
   cubeOpacity,
   faceOpacity,
   facelets,
-  alg,
   rv,
   ox,
   oy,
@@ -462,11 +460,12 @@ const generateImage = ({
   sw,
   cubeColour,
   OUTLINE_WIDTH,
+  imageSize,
 }) => {
   const p = initCube(rv, puzzleSize, distanceFromCube, rotationSequence);
   const ro = initRenderOrder(rv);
 
-  let cube = `<svg xmlns='http://www.w3.org/2000/svg' width='${puzzleSize}' height='${puzzleSize}' viewBox='${ox} ${oy} ${vw} ${vh}'>`;
+  let cube = `<svg xmlns='http://www.w3.org/2000/svg' width='${imageSize}' height='${imageSize}' viewBox='${ox} ${oy} ${vw} ${vh}'>`;
 
   // Draw background
   if (backgroundColour) {
@@ -567,10 +566,11 @@ const generateImage = ({
 
   cube += '</svg>';
 
-  let img = outputFormat === 'svg' ? cube : '';
-  //convert(cube, fmt, size);
-  // display_img(img, fmt);
-  return cube;
+  return outputFormat === 'svg' ? cube : convert(cube, outputFormat);
 };
 
+const convert = (svgString, fmt) => {
+  const svgBuffer = Buffer.from(svgString);
+  return sharp(svgBuffer).toFormat(fmt).toBuffer();
+};
 export { generateImage };

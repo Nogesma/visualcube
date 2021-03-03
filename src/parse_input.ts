@@ -179,9 +179,17 @@ const parseEverything = (options) => {
   const puzzleSize: number = isNumberBetweenOrDefault(
     0,
     11,
-    options?.pzl,
+    options.pzl,
     defaultConfig.defaultPuzzle
   );
+
+  const imageSize: number = isNumberBetweenOrDefault(
+    0,
+    2049,
+    options.size,
+    defaultConfig.defaultSize
+  );
+
   const colourScheme = getColourScheme(
     defaultConfig.colourScheme,
     options?.scheme
@@ -241,6 +249,7 @@ const parseEverything = (options) => {
     sw: defaultConfig.sw,
     cubeColour: defaultConfig.cubeColour,
     OUTLINE_WIDTH: defaultConfig.OUTLINE_WIDTH,
+    imageSize,
   };
 };
 

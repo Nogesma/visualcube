@@ -1,6 +1,6 @@
 {
   "name": "visualcube",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "main": "./dist/index.js",
   "files": [
     "/dist",
@@ -22,10 +22,10 @@
     "url": "https://github.com/Nogesma/visualcube/issues"
   },
   "dependencies": {
-    "ramda": "^0.27.1"
+    "ramda": "^0.27.1",
+    "sharp": "^0.27.2"
   },
   "devDependencies": {
-    "@tsconfig/node14": "^1.0.0",
     "@types/node": "^14.14.31",
     "@types/ramda": "^0.27.38",
     "prettier": "^2.2.1",

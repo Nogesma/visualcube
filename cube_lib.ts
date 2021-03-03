@@ -2810,43 +2810,7 @@ function compress_alg(alg) {
         }
     return alg;
 }
-// Inverts an NxN cube algorithm
-function invert_alg(alg) {
-    var inv;
-    inv = "";
-    var pow;
-    pow = 1;
-    var pre;
-    pre = "";
-    var i;
-    i = strlen(alg) - 1;
-    __loop1:
-        while (i >= 0) {
-            var c;
-            c = substr(alg, i, 1);
-            var mv;
-            mv = fcs_move_id(c);
-            if (mv != -1) {
-                // Retrive layer depth
-                if (i > 0) {
-                    pre = substr(alg, i - 1, 1);
-                    if (!is_numeric(pre) || i > 1 && fcs_move_id(substr(alg, i - 2, 1)) != -1) {
-                        pre = "";
-                    } else {
-                        i--;
-                    }
-                }
-                // Invert and add the move
-                inv += pre.c.ALG_POW[3 - pow] + " ";
-                pow = 1;
-                pre = "";
-            } else {
-                pow = move_pow(substr(alg, i, 1));
-            }
-            i--;
-        }
-    return inv;
-}
+
 // Returns an array of algorithm statistics
 // including, STM, HTM, QTM and GEN
 function alg_stats(alg) {

@@ -25,16 +25,7 @@ export default {
   cubeOpacity: 100,
   faceletOpacity: 100,
   distance: 5,
-  outputFormatOptions: [
-    'gif',
-    'png',
-    'svg',
-    'jpg',
-    'jpe',
-    'jpeg',
-    'tiff',
-    'ico',
-  ],
+  outputFormatOptions: ['jpeg', 'jpg', 'png', 'tiff', 'webp'],
   OUTLINE_WIDTH: 0.94,
   sw: 0,
   ox: -0.9,
@@ -49,8 +40,5 @@ export default {
     [-1, 0, 0],
     [0, 0, 1],
   ],
+  defaultSize: 128,
 };
-
-// const N = 6;
-// const O = 7;
-// const T = 8;
