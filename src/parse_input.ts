@@ -1,15 +1,16 @@
-import * as R from 'ramda';
+import R from 'ramda';
 
-import defaultConfig from './config.js';
+import { ColourScheme, Options } from './config';
+import { defaultConfig } from './config.js';
 import { fcs_doperm, invert_alg } from './alg_parser.js';
 
 const getOutputFormat = (
   defaultFormat: string,
   formatOptions: string[],
-  requestedFormat: string
+  requestedFormat: string | undefined
 ): string => {
   if (R.includes(requestedFormat, formatOptions)) {
-    return requestedFormat;
+    return <string>requestedFormat;
   }
   return defaultFormat;
 };
@@ -23,13 +24,13 @@ const parseRotation = R.cond([
 const getRotationSequence = (
   defaultRotation: string[],
   view: string,
-  rtn: string
+  rtn: string | undefined
 ): number[][] => {
   if (view === 'plan') {
     return [[0, -90]];
   }
   const regexMatch: string[] = rtn
-    ? R.match(/([xyz])(\-?[0-9][0-9]?[0-9]?)/g, rtn)
+    ? R.match(/([xyz])(-?[0-9][0-9]?[0-9]?)/g, rtn)
     : [];
   const rotationMatch: string[] = R.isEmpty(regexMatch)
     ? defaultRotation
@@ -39,14 +40,24 @@ const getRotationSequence = (
 };
 
 // Check if a number is between X and Y (excluded), if not defaults to another number
-const isNumberBetweenOrDefault = (x, y, num: number, def: number): number =>
-  R.both(R.lt(x), R.gt(y))(num) ? num : def;
+const isNumberBetweenOrDefault = (
+  x: number,
+  y: number,
+  num: number | undefined,
+  def: number
+): number => <number>(R.both(R.lt(x), R.gt(y))(num) ? num : def);
 
-const getColourScheme = (defaultColourScheme, scheme) =>
-  R.mergeRight(defaultColourScheme, scheme);
+const getColourScheme = (
+  defaultColourScheme: ColourScheme,
+  scheme: ColourScheme | undefined
+): ColourScheme => R.mergeRight(defaultColourScheme, <object>scheme);
 
 // Retrieve stage variable
-const getStageMask = (defaultStage, stage, dim) => {
+const getStageMask = (
+  defaultStage: string,
+  stage: string | undefined,
+  dim: number
+): string => {
   // Extract rotation sequence if present
   const [stageMask, stageRotation] = R.split('-', stage ?? defaultStage);
 
@@ -153,7 +164,11 @@ const getStageMask = (defaultStage, stage, dim) => {
   return mask;
 };
 
-const generateFacelets = (dim, mask, view) => {
+const generateFacelets = (
+  dim: number,
+  mask: string,
+  view: string
+): number[] => {
   let f = [];
   for (let fc = 0; fc < 6; fc++) {
     for (let i = 0; i < dim * dim; i++) {
@@ -164,11 +179,11 @@ const generateFacelets = (dim, mask, view) => {
   return f;
 };
 
-const parseEverything = (options) => {
+const parseEverything = (options: Options) => {
   const outputFormat: string = getOutputFormat(
     defaultConfig.outputFormat,
     defaultConfig.outputFormatOptions,
-    options?.fmt
+    options.fmt
   );
   const view = options?.view ?? defaultConfig.view;
   const rotationSequence: number[][] = getRotationSequence(
@@ -176,6 +191,7 @@ const parseEverything = (options) => {
     view,
     options.rtn
   );
+
   const puzzleSize: number = isNumberBetweenOrDefault(
     0,
     11,
@@ -190,17 +206,18 @@ const parseEverything = (options) => {
     defaultConfig.defaultSize
   );
 
-  const colourScheme = getColourScheme(
+  const colourScheme: ColourScheme = getColourScheme(
     defaultConfig.colourScheme,
-    options?.scheme
+    options.scheme
   );
+
   const distanceFromCube = isNumberBetweenOrDefault(
     0,
     101,
     options?.dist,
     defaultConfig.distance
   );
-  const backgroundColour = options?.bg ?? defaultConfig.backgroundColour;
+  const backgroundColour = options.bg ?? defaultConfig.backgroundColour;
   const cubeOpacity =
     view === 'trans'
       ? 50
@@ -234,7 +251,7 @@ const parseEverything = (options) => {
     view,
     rotationSequence,
     puzzleSize,
-    colourScheme,
+    cs: colourScheme,
     distanceFromCube,
     backgroundColour,
     cubeOpacity,

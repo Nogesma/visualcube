@@ -1,6 +1,6 @@
-// Project 3D points onto a 2D plane
-import * as R from 'ramda';
+import R from 'ramda';
 
+// Project 3D points onto a 2D plane
 const project = (q: number[], d: number): number[] => [
   (q[0] * d) / q[2],
   (q[1] * d) / q[2],
@@ -8,11 +8,17 @@ const project = (q: number[], d: number): number[] => [
 ];
 
 // Returns whether a face is visible
-const face_visible = (face: number, rv: number[]): boolean =>
+const face_visible = (face: number, rv: number[][]): boolean =>
   rv[face][2] < -0.105;
 
 // Returns svg for a cube outline
-const outline_svg = (q: number[], fc: number, cc, dim, OUTLINE_WIDTH): string =>
+const outline_svg = (
+  q: number[][][][],
+  fc: number,
+  cc: string,
+  dim: number,
+  OUTLINE_WIDTH: number
+): string =>
   `<polygon fill='${cc}' stroke='${cc}' points='${
     q[fc][0][0][0] * OUTLINE_WIDTH
   },${q[fc][0][0][1] * OUTLINE_WIDTH} ${q[fc][dim][0][0] * OUTLINE_WIDTH},${
@@ -24,7 +30,7 @@ const outline_svg = (q: number[], fc: number, cc, dim, OUTLINE_WIDTH): string =>
 // -------------------[ 3D Geometry Functions ]--------------------
 // Move point by translation vector
 const translate = (q: number[], t: number[]): number[] =>
-  R.addIndex(R.map)((a: number, i) => R.add(a, t[i]))(q);
+  R.addIndex(R.map)((a, i) => R.add(t[i], <number>a), q);
 
 const scale = (q: number[], f: number): number[] => R.map(R.multiply(f))(q);
 

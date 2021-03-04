@@ -1,7 +1,7 @@
 // Permutes an NxNxN face definition according to the given alg
-import * as R from 'ramda';
+import R from 'ramda';
 
-const fcs_pos = (r, c, o, d) => {
+const fcs_pos = (r: number, c: number, o: number, d: number): number => {
   switch (o) {
     case 1:
       return d * r + c;
@@ -20,10 +20,11 @@ const fcs_pos = (r, c, o, d) => {
     case 8:
       return d * d - d * c - 1 - r;
   }
+  return -1;
 };
 
 // Translations defined in $t2 are applied to $t1
-const fcs_union = (t1, t2, offset: number) => {
+const fcs_union = (t1: number[], t2: number[], offset: number): number[] => {
   const newT1 = R.clone(t1);
   for (let i in t2) {
     newT1[Number(i) + offset] = t2[i] + offset;
@@ -32,7 +33,11 @@ const fcs_union = (t1, t2, offset: number) => {
 };
 
 // Permutes given array, storing output in second array
-const fcs_permute = (_in, out, perm) => {
+const fcs_permute = (
+  _in: number[],
+  out: number[],
+  perm: number[]
+): number[] => {
   const newOut = R.clone(out);
   for (let i in _in) {
     newOut[i] = _in[perm[i]];
@@ -41,7 +46,7 @@ const fcs_permute = (_in, out, perm) => {
 };
 
 // Maps move names to a move id
-function fcs_move_id(move) {
+function fcs_move_id(move: string): number {
   switch (move) {
     case 'y':
       return 0;
@@ -90,7 +95,7 @@ function fcs_move_id(move) {
 }
 
 // Returns the power of a move with given suffix
-const move_pow = (char) => {
+const move_pow = (char: string): number => {
   switch (char) {
     case '2':
       return 2;
@@ -103,7 +108,7 @@ const move_pow = (char) => {
 };
 
 // Parses an algorithm string into a move-id sequence
-const fcs_parse_alg = (alg, dim) => {
+const fcs_parse_alg = (alg: string, dim: number): number[] => {
   let moves = [];
   let j = 0;
   let mvArray = R.split(' ', alg);
@@ -111,7 +116,7 @@ const fcs_parse_alg = (alg, dim) => {
     const mv = R.match(/[rufldbemsxyzw]+/gi, c)[0];
     let mvID = fcs_move_id(mv);
     if (mvID > 0) {
-      let pre: number = Number(R.match(/\d/g, c)[0]) || 1;
+      let pre = Number(R.match(/\d/g, c)[0]) || 1;
       const pow = R.split(mv, c)[1];
       let powID = move_pow(pow);
 
@@ -121,7 +126,7 @@ const fcs_parse_alg = (alg, dim) => {
         pre = pre < 2 ? 2 : pre;
       }
       for (let k = 0; k < powID; k++) {
-        moves[j++] = mvID < 6 ? mv : 6 + (mvID - 6) * (dim - 1) + (pre - 1);
+        moves[j++] = mvID < 6 ? mvID : 6 + (mvID - 6) * (dim - 1) + (pre - 1);
       }
     }
   }
@@ -129,7 +134,7 @@ const fcs_parse_alg = (alg, dim) => {
   return moves;
 };
 
-const fcs_doperm = (fcs, alg, dim) => {
+const fcs_doperm = (fcs: number[], alg: string, dim: number): number[] => {
   let nf = dim * dim;
   // Generate basic move tables
   // Twist generic face
@@ -157,7 +162,7 @@ const fcs_doperm = (fcs, alg, dim) => {
     [4, 7, 0, 1, 6, 0],
   ];
   // Twist individual slices
-  let sl_twist = [];
+  let sl_twist: number[][][] = [];
   for (let lr = 0; lr < 6; lr++) {
     sl_twist.push([]);
     for (let sl = 0; sl < dim; sl++) {
@@ -175,7 +180,7 @@ const fcs_doperm = (fcs, alg, dim) => {
   }
 
   // Initialise move tables
-  const fc_moves = [];
+  const fc_moves: number[][] = [];
   for (let i = 0; i < dim * 6; i++) {
     fc_moves.push([]);
     for (let j = 0; j < nf * 6; j++) {
@@ -240,7 +245,7 @@ const fcs_doperm = (fcs, alg, dim) => {
   }
   // Carry out moves
   let moves = fcs_parse_alg(alg, dim);
-  let fcs_ = [];
+  let fcs_: number[] = [];
   for (let mv of moves) {
     fcs_ = fcs_permute(fcs, fcs_, fc_moves[mv]);
     let tmp = fcs;
@@ -250,12 +255,12 @@ const fcs_doperm = (fcs, alg, dim) => {
   return fcs;
 };
 
-const invert_alg = (alg) => {
+const invert_alg = (alg: string) => {
   const ALG_POW = ['', '2', "'"];
   let inv = '';
   let pow = 1;
   let pre = '';
-  let i = R.length(alg) - 1;
+  let i = alg.length - 1;
   while (i >= 0) {
     let c = alg.substr(i, 1);
     let mv = fcs_move_id(c);

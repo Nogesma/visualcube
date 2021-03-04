@@ -1,4 +1,52 @@
-export default {
+interface ColourScheme {
+  [U: string]: string;
+  R: string;
+  F: string;
+  L: string;
+  D: string;
+  B: string;
+  T: string;
+}
+
+interface Options {
+  fmt?: string;
+  rtn?: string;
+  view?: string;
+  pzl?: number;
+  size?: number;
+  scheme?: ColourScheme;
+  dist?: number;
+  co?: number;
+  fo?: number;
+  stage?: string;
+  alg?: string;
+  case?: string;
+  bg?: string;
+}
+
+interface SvgOptions {
+  outputFormat: string;
+  view: string;
+  rotationSequence: number[][];
+  puzzleSize: number;
+  cs: ColourScheme;
+  distanceFromCube: number;
+  backgroundColour: string;
+  cubeOpacity: number;
+  faceOpacity: number;
+  facelets: number[];
+  rv: number[][];
+  ox: number;
+  oy: number;
+  vw: number;
+  vh: number;
+  sw: number;
+  cubeColour: string;
+  OUTLINE_WIDTH: number;
+  imageSize: number;
+}
+
+const defaultConfig = {
   maxPuzzleSize: 10,
   defaultPuzzle: 3,
   outputFormat: 'svg',
@@ -42,3 +90,5 @@ export default {
   ],
   defaultSize: 128,
 };
+
+export { defaultConfig, SvgOptions, ColourScheme, Options };

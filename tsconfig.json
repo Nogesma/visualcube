@@ -2,13 +2,16 @@
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
     "removeComments": true,
-    "outDir": "dist",
-    "lib": ["ES2020"],
-    "module": "ES2020",
+    "outDir": "./dist/esm",
     "moduleResolution": "node",
-    "target": "ES2020"
+    "module": "ES2020",
+    "target": "ES2020",
+    "sourceMap": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "declaration": true
   },
-
   "include": ["index.ts", "src/**/*"],
-  "exclude": ["node_modules", "cube_lib.ts"]
+  "exclude": ["node_modules"]
 }
