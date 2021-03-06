@@ -84,157 +84,63 @@ const initRenderOrder = (rv: number[][]) => {
   return ro;
 };
 
-// -----------------[ User input functions ]----------------------
-
-// TODO: Parse arrow definition
-// function parse_arrow(str, dim) {
-// 	var parts;
-// 	parts = preg_split('/-/', str);
-// 	var fcodes;
-// 	fcodes = {
-// 		'U': 0,
-// 		'R': 1,
-// 		'F': 2,
-// 		'D': 3,
-// 		'L': 4,
-// 		'B': 5
-// 	};
-// 	if (count(parts) == 0) {
-// 		return null;
-// 	}
-// 	if (!preg_match_all('/([URFDLB])([0-9]+)/', parts[0], split) || count(split) < 2) {
-// 		return null;
-// 	}
-// 	var arrow;
-// 	arrow = {};
-// 	arrow[4] = 1;
-// 	var i;
-// 	__loop1:
-// 		for (i = 0; i < 3; i++) {
-// 			if (i == 2 && count(split[1]) < 3) {
-// 				arrow[2] = null;
-// 				break;
-// 			} else {
-// 				arrow[2][3] = 2;
-// 			}
-// 			arrow[i][0] = fcodes[split[1][i]];
-// 			var fn;
-// 			fn = split[2][i];
-// 			fn = fn >= dim * dim ? dim * dim - 1 : fn;
-// 			arrow[i][1] = fn % dim;
-// 			arrow[i][2] = floor(fn / dim);
-// 		}
-// 	// Parse remainder
-// 	__loop1:
-// 		for (i = 1; i < count(parts); i++) {
-// 			if (preg_match('/^i[0-9]+$/', parts[i]) && arrow[2]) {
-// 				arrow[2][3] = substr(parts[i], 1) / 5;
-// 				arrow[2][3] = arrow[2][3] > 10 ? 10 : arrow[2][3];
-// 				// Var range = 0 to 50, default 10
-// 			} else {
-// 				if (preg_match('/^s[0-9]+$/', parts[i])) {
-// 					arrow[4] = substr(parts[i], 1) / 10;
-// 					arrow[4] = arrow[4] > 2 ? 2 : arrow[4];
-// 					// Var range = 0 to 20, default 10
-// 				} else {
-// 					var ac_;
-// 					ac_ = parse_col(parts[i]);
-// 					if (ac_) {
-// 						arrow[3] = ac_;
-// 					}
-// 				}
-// 			}
-// 		}
-// 	return arrow;
-// }
-
-// TODO: Insert space in default fd/fc variables
-// function insert_space(_in ,dim)
-// {
-// 	var out;
-// 	out = '';
-// 	dim *= dim;
-// 		for (let i = 0; i < 6; i++) {
-// 			out += substr( _in , dim * i, dim
-// 		)
-// 			+' ';
-// 		}
-// 	return out;
-// }
-
 // ---------------------------[ Rendering Functions ]----------------------------
 // Returns svg for a faces facelets
 
 // TODO: Generates svg for an arrow pointing from sticker s1 to s2
-// function gen_arrow(id, s1, s2, sv, sc, col) {
+// function gen_arrow(
+//   s1: number[],
+//   s2: number[],
+//   sv: number[],
+//   sc: number,
+//   col: string,
+//   dim: number,
+//   p: number[][][][]
+// ): string {
 //   if (col === 't') {
-//     return;
+//     return '';
 //   }
 //   // Find centre point of each facelet
-//   let p1 = {
-//     0: (p[s1[0]][s1[1]][s1[2]][0] + p[s1[0]][s1[1] + 1][s1[2] + 1][0]) / 2,
-//     1: (p[s1[0]][s1[1]][s1[2]][1] + p[s1[0]][s1[1] + 1][s1[2] + 1][1]) / 2,
-//     2: 0,
-//   };
-//   let p2 = {
-//     0: (p[s2[0]][s2[1]][s2[2]][0] + p[s2[0]][s2[1] + 1][s2[2] + 1][0]) / 2,
-//     1: (p[s2[0]][s2[1]][s2[2]][1] + p[s2[0]][s2[1] + 1][s2[2] + 1][1]) / 2,
-//     2: 0,
-//   };
+//   let p1 = [
+//     (p[s1[0]][s1[1]][s1[2]][0] + p[s1[0]][s1[1] + 1][s1[2] + 1][0]) / 2,
+//     (p[s1[0]][s1[1]][s1[2]][1] + p[s1[0]][s1[1] + 1][s1[2] + 1][1]) / 2,
+//     0,
+//   ];
+//   let p2 = [
+//     (p[s2[0]][s2[1]][s2[2]][0] + p[s2[0]][s2[1] + 1][s2[2] + 1][0]) / 2,
+//     (p[s2[0]][s2[1]][s2[2]][1] + p[s2[0]][s2[1] + 1][s2[2] + 1][1]) / 2,
+//     0,
+//   ];
 //   // Find midpoint between p1 and p2
-//   let cp = {
-//     0: (p1[0] + p2[0]) / 2,
-//     1: (p1[1] + p2[1]) / 2,
-//     2: 0,
-//   };
+//   let cp = [(p1[0] + p2[0]) / 2, (p1[1] + p2[1]) / 2, 0];
 //   // Shorten arrows towards midpoint according to config
 //   p1 = trans_scale(p1, cp, sc);
 //   p2 = trans_scale(p2, cp, sc);
-//   if (sv) {
-//     var pv;
-//     pv = {
-//       0: (p[sv[0]][sv[1]][sv[2]][0] + p[sv[0]][sv[1] + 1][sv[2] + 1][0]) / 2,
-//       1: (p[sv[0]][sv[1]][sv[2]][1] + p[sv[0]][sv[1] + 1][sv[2] + 1][1]) / 2,
-//       2: 0,
-//     };
-//     // Project via point double dist from centre point
-//     pv = trans_scale(pv, cp, sv[3]);
-//   }
+//   let p_ = sv
+//     ? trans_scale(
+//         [
+//           (p[sv[0]][sv[1]][sv[2]][0] + p[sv[0]][sv[1] + 1][sv[2] + 1][0]) / 2,
+//           (p[sv[0]][sv[1]][sv[2]][1] + p[sv[0]][sv[1] + 1][sv[2] + 1][1]) / 2,
+//           0,
+//         ],
+//         cp,
+//         sv[3]
+//       )
+//     : p1;
+//
 //   // Calculate arrow rotation
-//   var p_;
-//   p_ = sv ? pv : p1;
-//   var rt;
-//   rt = p_[1] > p2[1] ? 270 : 90;
+//   let rt = p_[1] > p2[1] ? 270 : 90;
 //   if (p2[0] - p_[0] != 0) {
-//     rt = rad2deg(atan((p2[1] - p_[1]) / (p2[0] - p_[0])));
+//     rt = Math.atan((p2[1] - p_[1]) / (p2[0] - p_[0])) * (Math.PI / 180);
 //     rt = p_[0] > p2[0] ? rt + 180 : rt;
 //   }
-//   return '		<path d="M ' + p1[0] + ',' + p1[1] + ' ' + isset(pv)
-//     ? 'Q ' + pv[0] + ',' + pv[1]
-//     : 'L' +
-//         ' ' +
-//         p2[0] +
-//         ',' +
-//         p2[1] +
-//         '"\n\
-// 			style="fill:none;stroke:#' +
-//         col +
-//         ';stroke-opacity:1" />\n\
-// 		<path transform=" translate(' +
-//         p2[0] +
-//         ',' +
-//         p2[1] +
-//         ') scale(' +
-//         0.033 / dim +
-//         ') rotate(' +
-//         rt +
-//         ')"\n\
-// 			d="M 5.77,0.0 L -2.88,5.0 L -2.88,-5.0 L 5.77,0.0 z"\n\
-// 			style="fill:#' +
-//         col +
-//         ';stroke-width:0;stroke-linejoin:round"/>' +
-//         '\n\
-// ';
+//   return `<path d="M $p1[0],$p1[1] (isset($pv)?'Q '.$pv[0].','.$pv[1]:'L').' '.$p2[0].','.$p2[1].'"
+//     style="fill:none;stroke:${col};stroke-opacity:1" />
+//     <path transform="translate(${p2[0]},${p2[1]}) scale(${
+//     0.033 / dim
+//   }) rotate(${rt})"
+//     d="M 5.77,0.0 L -2.88,5.0 L -2.88,-5.0 L 5.77,0.0 z"
+//     style="fill:${col};stroke-width:0;stroke-linejoin:round/>`;
 // }
 
 const facelet_svg = (
@@ -333,7 +239,7 @@ function gen_facelet(
   cs: ColourScheme,
   facelets: number[]
 ): string {
-  let fcol = cs[['U', 'R', 'F', 'L', 'D', 'B', 'N', 'T'][facelets[seq]]];
+  let fcol = cs[['U', 'R', 'F', 'D', 'L', 'B', 'N', 'T'][facelets[seq]]];
   return `<polygon ${
     fcol === 't' ? 'fill-opacity="0"' : `fill='${fcol}'`
   } stroke='${cc}' points='${p1[0]},${p1[1]} ${p2[0]},${p2[1]} ${p3[0]},${
@@ -341,7 +247,7 @@ function gen_facelet(
   } ${p4[0]},${p4[1]}'/>`;
 }
 
-const generateImage = ({
+const generateImage = async ({
   outputFormat,
   view,
   rotationSequence,
@@ -361,7 +267,9 @@ const generateImage = ({
   cubeColour,
   OUTLINE_WIDTH,
   imageSize,
-}: SvgOptions): string | Promise<Buffer> => {
+}: // arrowsColour,
+// arrowsDefinitions,
+SvgOptions): Promise<Buffer> => {
   const p = initCube(rv, puzzleSize, distanceFromCube, rotationSequence);
   const ro = initRenderOrder(rv);
 
@@ -435,31 +343,36 @@ const generateImage = ({
     }
     cube += '</g>';
   }
-  // TODO: Draw Arrows
-  // if (isset(arrows)) {
-  // 	var awidth;
-  // 	awidth = 0.12 / dim;
-  // 	cube += '	<g style=\'opacity:1;stroke-opacity:1;stroke-width:' + awidth + ";stroke-linecap:round'>
-  // 	";
-  // 	__loop1:
-  // 		for (i in arrows) {
-  // 			a = arrows[i];
-  // 			cube += gen_arrow(i, a[0], a[1], a[2], a[4], array_key_exists(3, a) ? a[3] : ac);
-  // 		}
-  // 	cube += '	</g>\n\
-  // ';
+
+  // if (R.not(R.isEmpty(arrowsDefinitions))) {
+  //   const awidth = 0.12 / puzzleSize;
+  //   cube += `<g style=opacity:1;stroke-opacity:1;stroke-width:${awidth}};stroke-linecap:round>`;
+  //   for (let i in arrowsDefinitions) {
+  //     let a = arrowsDefinitions[i];
+  //     cube += gen_arrow(
+  //       a.arw[0],
+  //       a.arw[1],
+  //       a.arw[2],
+  //       a.arw4,
+  //       a.arw3 ?? arrowsColour,
+  //       puzzleSize,
+  //       p
+  //     );
+  //   }
+  //   cube += '</g>';
   // }
 
   cube += '</svg>';
 
-  return outputFormat === 'svg' ? cube : convert(cube, outputFormat);
+  const svgBuffer = Buffer.from(cube);
+  return outputFormat === 'svg'
+    ? Promise.resolve(svgBuffer)
+    : convert(svgBuffer, outputFormat);
 };
 
-const convert = (svgString: string, fmt: string): Promise<Buffer> => {
-  const svgBuffer = Buffer.from(svgString);
-  return sharp(svgBuffer)
+const convert = (svgBuffer: Buffer, fmt: string): Promise<Buffer> =>
+  sharp(svgBuffer)
     .toFormat(<keyof FormatEnum>fmt)
     .toBuffer();
-};
 
 export { generateImage };

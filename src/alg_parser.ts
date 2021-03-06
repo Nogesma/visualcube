@@ -113,11 +113,12 @@ const fcs_parse_alg = (alg: string, dim: number): number[] => {
   let j = 0;
   let mvArray = R.split(' ', alg);
   for (const c of mvArray) {
-    const mv = R.match(/[rufldbemsxyzw]+/gi, c)[0];
+    let pre = Number(R.match(/^\d/g, c)[0]) || 1;
+    const mv = R.match(/[a-zA-Z]+/g, c)[0];
+    const pow = R.match(/[\d\-']+$/g, c)[0];
+
     let mvID = fcs_move_id(mv);
     if (mvID > 0) {
-      let pre = Number(R.match(/\d/g, c)[0]) || 1;
-      const pow = R.split(mv, c)[1];
       let powID = move_pow(pow);
 
       pre = pre > dim - 1 ? dim - 1 : pre;
@@ -130,7 +131,6 @@ const fcs_parse_alg = (alg: string, dim: number): number[] => {
       }
     }
   }
-
   return moves;
 };
 

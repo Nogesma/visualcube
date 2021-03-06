@@ -179,6 +179,73 @@ const generateFacelets = (
   return f;
 };
 
+// // Retrieve arrow defn's
+// const getArrowDefinition = (arw: string, dim: number) => {
+//   const astr = R.split(',', arw);
+//   const arrows = [];
+//   let i = 0;
+//   for (let value of astr) {
+//     const a = parse_arrow(value, dim);
+//     console.log({ a });
+//
+//     if (a) arrows[i++] = a;
+//   }
+//   return arrows;
+// };
+
+// TODO: Parse arrow definition
+// function parse_arrow(str: string, dim: number) {
+//   let parts = R.split('-', str);
+//   let fcodes: { [key: string]: number } = {
+//     U: 0,
+//     R: 1,
+//     F: 2,
+//     D: 3,
+//     L: 4,
+//     B: 5,
+//   };
+//
+//   console.log({ parts });
+//   if (R.length(parts) == 0) return null;
+//
+//   const split = R.match(/([URFDLB])([0-9]+)/g, parts[0]);
+//   console.log({ split });
+//   if (R.length(split) == 0) return null;
+//
+//   let arrow: number[][] = [[], [], []];
+//   let arw3;
+//   let arw4 = 1;
+//
+//   for (let i = 0; i < 2; i++) {
+//     if (i == 2 && split[1].length < 3) {
+//       arrow[2][3] = 2;
+//     }
+//     arrow[i][0] = fcodes[split[1][i]];
+//     const fn =
+//       Number(split[1][i]) >= dim * dim ? dim * dim - 1 : Number(split[1][i]);
+//     arrow[i][1] = fn % dim;
+//     arrow[i][2] = Math.floor(fn / dim);
+//   }
+//   // Parse remainder
+//   for (let i = 1; i < R.length(parts); i++) {
+//     if (R.test(/^i[0-9]+$/g, parts[i]) && arrow[2]) {
+//       arrow[2][3] = Number(parts[i].substr(1)) / 5;
+//       arrow[2][3] = arrow[2][3] > 10 ? 10 : arrow[2][3];
+//       // Var range = 0 to 50, default 10
+//     } else {
+//       if (R.test(/^s[0-9]+$/g, parts[i])) {
+//         arw4 = Number(parts[i].substr(1)) / 10;
+//         arw4 = arw4 > 2 ? 2 : arw4;
+//         // Var range = 0 to 20, default 10
+//       } else {
+//         arw3 = Number(parts[i]);
+//       }
+//     }
+//   }
+//
+//   return { arrow, arw3, arw4 };
+// }
+
 const parseEverything = (options: Options) => {
   const outputFormat: string = getOutputFormat(
     defaultConfig.outputFormat,
@@ -234,6 +301,9 @@ const parseEverything = (options: Options) => {
     defaultConfig.faceletOpacity
   );
 
+  // const arrowsDefinitions = getArrowDefinition(options.arw ?? '', puzzleSize);
+  // const arrowsColour = options.ac ?? defaultConfig.arrowsColour;
+
   const mask = getStageMask(defaultConfig.stage, options.stage, puzzleSize);
   const facelets = generateFacelets(puzzleSize, mask, view);
 
@@ -267,121 +337,9 @@ const parseEverything = (options: Options) => {
     cubeColour: defaultConfig.cubeColour,
     OUTLINE_WIDTH: defaultConfig.OUTLINE_WIDTH,
     imageSize,
+    // arrowsColour,
+    // arrowsDefinitions,
   };
 };
-
-// Retrieve colour def
-// This overrides face def and makes the $scheme variable redundant (ie, gets reset to default)
-// let uf = DEFAULTS['fc'];
-
-//  uf = array_key_exists('fc', _REQUEST) ? _REQUEST['fc'] : (!array_key_exists('fd', _REQUEST) ? DEFAULTS['fc'] : '');
-// if (preg_match('/^[ndlswyrobgmpt]+$/', uf)) {
-// 	using_cols = true;
-// 	scheme = DEF_SCHEME;
-// 	var nf;
-// 	nf = strlen(uf);
-// 	__loop1:
-// 		for (fc = 0; fc < 6; fc++) {
-// 			__loop2: for (i = 0; i < dim * dim; i++) {
-// 				// Add user defined face
-// 				if (fc * dim * dim + i < nf) {
-// 					facelets[fc * dim * dim + i] = uf[fc * dim * dim + i];
-// 				} else {
-// 					facelets[fc * dim * dim + i] = schcode[fc];
-// 				}
-// 			}
-// 		}
-// }
-
-// TODO: Retrieve facelet def
-// if (!uf) {
-// 	uf = array_key_exists('fd', _REQUEST) ? _REQUEST['fd'] : DEFAULTS['fd'];
-// 	if (preg_match('/^[udlrfbnot]+$/', uf)) {
-// 		// Map from face names to numeric face ID
-// 		var fd_map;
-// 		fd_map = {
-// 			'u': U,
-// 			'r': R,
-// 			'f': F,
-// 			'd': D,
-// 			'l': L,
-// 			'b': B,
-// 			'n': N,
-// 			'o': O,
-// 			't': T
-// 		};
-// 		nf = strlen(uf);
-// 		__loop1:
-// 			for (fc = 0; fc < 6; fc++) {
-// 				__loop2: for (i = 0; i < dim * dim; i++) {
-// 					// Add user defined face
-// 					if (fc * dim * dim + i < nf) {
-// 						facelets[fc * dim * dim + i] = fd_map[uf[fc * dim * dim + i]];
-// 					} else {
-// 						facelets[fc * dim * dim + i] = view == 'trans' ? T : N;
-// 					}
-// 				}
-// 			}
-// 	}
-// }
-
-// // Retrieve arrow defn's
-// if (array_key_exists('arw', _REQUEST)) {
-//     var astr;
-//     astr = preg_split('/,/', _REQUEST['arw']);
-//     i = 0;
-//     var _key_;
-//     __loop1:
-//         for (_key_ in astr) {
-//             var a;
-//             a = astr[_key_];
-//             var a_;
-//             a_ = parse_arrow(a, dim);
-//             if (a_) {
-//                 var arrows;
-//                 arrows[i++] = a_;
-//             }
-//         }
-// }
-// // Retrieve default arrow colour
-// var ac;
-// ac = GREY;
-// if (array_key_exists('ac', _REQUEST)) {
-//     var ac_;
-//     ac_ = parse_col(_REQUEST['ac']);
-//     if (ac_ && ac_ != 't') {
-//         ac = ac_;
-//     }
-// }
-// // Retrieve alg def
-// if (array_key_exists('alg', _REQUEST) || array_key_exists('case', _REQUEST) || array_key_exists('alg', DEFAULTS) || array_key_exists('case', DEFAULTS)) {
-// 	if (array_key_exists('alg', _REQUEST)) {
-// 		var alg;
-// 		alg = _REQUEST['alg'];
-// 	} else {
-// 		alg = DEFAULTS['alg'];
-// 	}
-// 	if (array_key_exists('case', _REQUEST)) {
-// 		var
-// 			case;
-// 	case
-// 		= _REQUEST['case'];
-// 	} else {
-// 	case
-// 		= DEFAULTS['case'];
-// 	}
-// 	alg = fcs_format_alg(urldecode(alg));
-// case
-// 	= invert_alg(fcs_format_alg(urldecode(
-// case)))
-// 	;
-// 	//			$facelets = facelet_cube(case_cube($alg), $dim, $facelets); // old 3x3 alg system
-// 	facelets = fcs_doperm(facelets
-// case
-// 	+' ' + alg, dim
-// )
-// 	;
-// 	// new NxN facelet permute
-// }
 
 export { parseEverything };

@@ -22,6 +22,8 @@ interface Options {
   alg?: string;
   case?: string;
   bg?: string;
+  // ac?: string;
+  // arw?: string;
 }
 
 interface SvgOptions {
@@ -44,6 +46,8 @@ interface SvgOptions {
   cubeColour: string;
   OUTLINE_WIDTH: number;
   imageSize: number;
+  // arrowsColour: string;
+  // arrowsDefinitions: any;
 }
 
 const defaultConfig = {
@@ -73,7 +77,7 @@ const defaultConfig = {
   cubeOpacity: 100,
   faceletOpacity: 100,
   distance: 5,
-  outputFormatOptions: ['jpeg', 'jpg', 'png', 'tiff', 'webp'],
+  outputFormatOptions: ['jpeg', 'jpg', 'png', 'tiff', 'webp', 'svg'],
   OUTLINE_WIDTH: 0.94,
   sw: 0,
   ox: -0.9,
@@ -89,6 +93,7 @@ const defaultConfig = {
     [0, 0, 1],
   ],
   defaultSize: 128,
+  // arrowsColour: 'grey',
 };
 
 export { defaultConfig, SvgOptions, ColourScheme, Options };

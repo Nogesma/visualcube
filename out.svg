@@ -1,0 +1,18 @@
+{ parts: [ 'U1U5' ] }
+{ split: [ 'U1', 'U5' ] }
+{ a: { arrow: [ [Array], [Array], [] ], arw3: undefined, arw4: 1 } }
+{ parts: [ 'U5U1' ] }
+{ split: [ 'U5', 'U1' ] }
+{ a: { arrow: [ [Array], [Array], [] ], arw3: undefined, arw4: 1 } }
+{ parts: [ 'U3U7' ] }
+{ split: [ 'U3', 'U7' ] }
+{ a: { arrow: [ [Array], [Array], [] ], arw3: undefined, arw4: 1 } }
+{ parts: [ 'U7U3' ] }
+{ split: [ 'U7', 'U3' ] }
+{ a: { arrow: [ [Array], [Array], [] ], arw3: undefined, arw4: 1 } }
+[
+  { arrow: [ [Array], [Array], [] ], arw3: undefined, arw4: 1 },
+  { arrow: [ [Array], [Array], [] ], arw3: undefined, arw4: 1 },
+  { arrow: [ [Array], [Array], [] ], arw3: undefined, arw4: 1 },
+  { arrow: [ [Array], [Array], [] ], arw3: undefined, arw4: 1 }
+]
