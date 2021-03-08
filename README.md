@@ -28,25 +28,25 @@ npm install visualcube
 ## Usage
 ### Basic Usage
 ```js
-import visualcube from 'visualcube';
+import { visualcube } from 'visualcube';
 // // or if you're using cjs
-const visualcube = require('visualcube');
+const { visualcube } = require('visualcube');
 
 // Usage
 visualcube({options});
 // returns a buffer of an image (svg, webp, png,...) depending on the options
 ```
 
-### Available options and their defaults: 
+### Available options and their defaults:
 
 ```js
 const defaultConfig = {
   pzl: 3, // Size of the cube (1-10)
   fmt: 'webp', // Output format of image ('jpeg', 'jpg', 'png', 'tiff', 'webp', 'svg')
   size: 128, // Size of the image (converting large images from svg to other formats may be slow, no limits on size)
-  view: '', // plan or trans 
+  view: '', // plan or trans
   stage: '', // ( fl | f2l | ll | cll | ell | oll | ocll | oell | coll | ocell | wv | vh | els | cls | cmll | cross | f2l_3 | f2l_2 | f2l_sm | f2l_1 | f2b | line | 2x2x2 | 2x2x3 )-?[xyz2']*
-  rotation: ['y45', 'x-34'], // ([xyz]-?[0-9][0-9]?[0-9]?)+	
+  rotation: ['y45', 'x-34'], // ([xyz]-?[0-9][0-9]?[0-9]?)+
   alg: '', // Alg to apply (each move must be separated by a space to avoid ambiguous cases ex: R2L can be R2 L or R 2L)
   case: '', // Alg to solve the case
   faceletDefinition: '',

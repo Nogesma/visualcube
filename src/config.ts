@@ -53,7 +53,7 @@ interface SvgOptions {
 const defaultConfig = {
   maxPuzzleSize: 10,
   defaultPuzzle: 3,
-  outputFormat: 'svg',
+  outputFormat: 'webp',
   outputSize: 128,
   view: '',
   stage: '',
